@@ -1,0 +1,34 @@
+
+/*
+    x：起始位置到环起点的距离
+    y：环起点到相遇点的距离
+    z：相遇点到环起始点的距离
+    (x+y) * 2 = n*(y+z) + (x+y)
+  ->     (x+y)=n*(y+z)
+  ->         x=n*(y+z) - y
+  -> n = 1   x=z
+*/
+
+class Solution
+{
+public:
+    ListNode *detectCycle(ListNode *head)
+    {
+        ListNode *fast = head, *slow = head;    //快，慢指针
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(fast == slow){
+                break;  // 快慢相遇退出循环
+            }
+        }
+        if(fast == NULL || fast->next == NULL) return NULL; //无环情况
+        slow = head; //重新让 慢指针 指向首地址
+        while (slow != fast)
+        {
+            slow = slow->next;
+            fast = fast->next;  //快慢各走一步，再次相遇就是环的起始位置
+        }
+        return slow;
+    }
+};

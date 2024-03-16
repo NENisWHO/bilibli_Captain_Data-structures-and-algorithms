@@ -1,0 +1,49 @@
+//1
+class Solution
+{
+public:
+    ListNode *reversed(ListNode *pre,ListNode *cur)
+    {
+        if(cur == NULL) return pre;
+        ListNode *tmp = cur->next;
+        cur->next = pre;
+
+        return reversed(cur,tmp);
+    }
+    ListNode *reverseList(ListNode *head)
+    {
+        // 和双指针法初始化是一样的逻辑
+        // ListNode* cur = head;
+        // ListNode* pre = NULL;
+        return reversed(NULL,head);
+    }
+};
+
+//2
+/*
+                                                                        |new_head
+    开始:       1->2->3->4->5->NULL   head = 1    tail = 2              |5->4->3->2->1->NULL
+    第一次递归：     2->3->4->5->NULL   head1 = 2   tail1 = 3            |5->4->3->2->NULL
+    第二次递归：        3->4->5->NULL   head2 = 3   tail2 = 4            |5->4->3->NULL
+    第三次递归：            4->5->NULL  head3 = 4   tail3 = 5            |5->4->NULL
+    第四次递归：               5->NULL  head4 = 5   new_head = head4     |
+
+*/
+class Solution
+{
+public:
+    ListNode *reverseList(ListNode *head)
+    {
+        // 边界条件：空链表或者只有一个节点的链表，直接返回该链表
+        if (head == NULL || head->next == NULL)
+            return head;
+        // 用一个意义为尾巴的tail结点记录链表首元素的下一个结点
+        ListNode *tail = head->next;
+        // 假设初始链表的头节点之后的链表实现了反转
+        ListNode *new_head = reverseList(head->next);
+        // 让头结点接在尾巴上
+        head->next = tail->next;
+        tail->next = head;
+        return new_head;
+    }
+};
