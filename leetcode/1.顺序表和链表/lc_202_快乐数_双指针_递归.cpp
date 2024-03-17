@@ -1,0 +1,42 @@
+/*
+「快乐数」 定义为：
+- 对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。
+- 然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
+- 如果这个过程 结果为 1，那么这个数就是快乐数。
+- 如果 n 是 快乐数 就返回 true ；不是，则返回 false 。
+
+输入：n = 19
+输出：true
+解释：
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+
+19->82->68->100->1->NULL   : 可以抽象成链表结构 用判环 来判断是不是快乐数
+
+*/
+
+class Solution
+{
+public:
+    int getNext(int x){
+        int d = 0, y = 0;
+        while(x){
+            d = x % 10; //取个位数
+            y += d * d; //个位数平方和
+            x = x / 10; //去掉个位数
+        }
+        return y;   // 以上是计算 数的各个位的平方和 得到下一位数。
+    }
+    bool isHappy(int n)
+    {
+        int fast = n, slow = n;
+        while(fast != 1){
+            slow = getNext(slow);           //得到下一位数
+            fast = getNext(getNext(fast));  //得到下两位数
+            if(slow == fast && slow != 1) return false; //有环，不是快乐数
+        }
+        return true;    //无环是快乐数
+    }
+};

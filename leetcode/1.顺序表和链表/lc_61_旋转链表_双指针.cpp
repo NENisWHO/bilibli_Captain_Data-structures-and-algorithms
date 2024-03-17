@@ -1,0 +1,44 @@
+
+/*
+给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+注意：k超出了链表长度需要取余操作。
+
+例如： k = 2
+    1->2->3->4->5->NULL   -->  1->2->3->4->5->NULL --> 1->2->3->NULL  4->5->NULL
+    b        f                       b         f             b        f
+
+    --> 1->2->3->NULL   4->5->NULL   --> 4->5->1->2->3->NULL
+                       f,b               f  b
+*/
+
+class Solution
+{
+public:
+    int getLength(ListNode *head){
+        int n = 0;
+        while(head){
+            n += 1;
+            head = head->next;
+        }
+        return n;
+    }
+    ListNode *rotateRight(ListNode *head, int k)
+    {
+        if(head == NULL || head->next == NULL) return head;
+        int n = getLength(head);
+        k %= n; //第一步先取余
+        if (k == 0) return head; // 如果 k == 0 无需旋转链表
+
+        ListNode * front = head, *back = head;  //第二步 定义双指针，让快指针向前走k+1步
+        for (int i = 0; i <= k; i++) front = front->next;
+        while(front) back = back->next, front = front->next;//再同时向前走，后指针到达链表分割点
+
+        front = back->next; //让快指针回到第二部分链表的首地址，作为新链表的首地址
+        back->next = NULL;  //分割链表
+
+        back = front;       //此时慢指针的意义变成了工具指针
+        while (back->next != NULL) back = back->next;
+        back->next = head;  //拼接链表
+        return front;
+    }
+};
