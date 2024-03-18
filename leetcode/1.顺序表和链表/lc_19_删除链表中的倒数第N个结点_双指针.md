@@ -1,5 +1,6 @@
 
 
+```c++
 class Solution
 {
 public:
@@ -14,3 +15,4 @@ public:
         return new_head.next;
     }
 };
+```
